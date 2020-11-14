@@ -1,79 +1,26 @@
-# Реализовать структуру данных «Товары». Она должна представлять собой список кортежей.
-# Каждый кортеж хранит информацию об отдельном товаре. В кортеже должно быть два элемента — номер товара
-# и словарь с параметрами (характеристиками товара: название, цена, количество, единица измерения).
-# Структуру нужно сформировать программно, т.е. запрашивать все данные у пользователя.
-# Необходимо собрать аналитику о товарах. Реализовать словарь, в котором каждый ключ —
-# характеристика товара, например название, а значение — список значений-характеристик,
-# например список названий товаров.
+# Реализовать функцию int_func(), принимающую слово из маленьких латинских букв и возвращающую его же,
+# но с прописной первой буквой. Например, print(int_func(‘text’)) -> Text.
+# Продолжить работу над заданием. В программу должна попадать строка из слов, разделенных пробелом.
+# Каждое слово состоит из латинских букв в нижнем регистре. Сделать вывод исходной строки, но каждое слово
+# должно начинаться с заглавной буквы. Необходимо использовать написанную ранее функцию int_func().
+# nice авп ъghj jапро hjjпаро вапрghgh cool
 
-menu = "*** База данных товаров ***\n* добавить товар - введите 'i'\n* просмотреть данные о товарах - введите 'd'\n" \
-       "* просмотреть аналитику - введите 'a'\n* завершить работу - введите 'q'\n"
-goods = []
+def int_func(string):
+    words_list = string.split()
+    new_words_list = words_list.copy()
+    for i in words_list:
+        letters_list = list(i)
+        for j in letters_list:
+            if 97 <= ord(j) <= 122:
+                continue
+            else:
+                new_words_list.remove(i)
+                break
+    for w, elem in enumerate(new_words_list):
+        new_words_list[w] = elem.title()
+    new_string = " ".join(new_words_list)
+    return new_string
 
-while True:
-    request = input(menu)
-    if request == "i":
-        item = input("Введите название товара: ")
-        price = float(input("Введите цену: "))
-        quantity = int(input("Введите количество: "))
-        unit = input("Введите единицу измерения: ")
-        item_dict = {"название": item, "цена": price, "количество": quantity, "единица измерения": unit}
-        goods.append((len(goods) + 1, item_dict))
-        continue
-    elif request == "d":
-        if not goods:
-            print("Пока не введено ни одного товара")
-            continue
-        else:
-            print(goods)
-            continue
-    elif request == "a":
-        if not goods:
-            print("Пока не введено ни одного товара")
-            continue
-        else:
-            item_values = []
-            price_values = []
-            quantity_values = []
-            unit_values = []
 
-            for i in goods:
-                item_values.append(i[1].get("название"))
-                price_values.append(i[1].get("цена"))
-                quantity_values.append(i[1].get("количество"))
-                unit_values.append(i[1].get("единица измерения"))
-
-            # Убираем дубли из списков значений характеристик товаров.
-            for i in item_values:
-                j = 1
-                while j < item_values.count(i):
-                    item_values.remove(i)
-                    j += 1
-
-            for i in price_values:
-                j = 1
-                while j < price_values.count(i):
-                    price_values.remove(i)
-                    j += 1
-
-            for i in quantity_values:
-                j = 1
-                while j < quantity_values.count(i):
-                    quantity_values.remove(i)
-                    j += 1
-
-            for i in unit_values:
-                j = 1
-                while j < unit_values.count(i):
-                    unit_values.remove(i)
-                    j += 1
-            #
-
-            analytics = {"название": item_values, "цена": price_values, "количество": quantity_values,
-                         "единица измерения": unit_values}
-            print(analytics)
-            continue
-    elif request == "q":
-        break
-    else:
-        continue
+user_string = input("Введите строку из слов, разделенных пробелом:\n").lower()
+print(int_func(user_string))

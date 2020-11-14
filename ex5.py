@@ -1,21 +1,52 @@
-# Реализовать структуру «Рейтинг», представляющую собой не возрастающий набор натуральных чисел.
-# У пользователя необходимо запрашивать новый элемент рейтинга.
-# Если в рейтинге существуют элементы с одинаковыми значениями, то новый элемент с тем же значением
-# должен разместиться после них.
+# Программа запрашивает у пользователя строку чисел, разделенных пробелом.
+# При нажатии Enter должна выводиться сумма чисел.
+# Пользователь может продолжить ввод чисел, разделенных пробелом и снова нажать Enter.
+# Сумма вновь введенных чисел будет добавляться к уже подсчитанной сумме.
+# Но если вместо числа вводится специальный символ, выполнение программы завершается.
+# Если специальный символ введен после нескольких чисел, то вначале нужно добавить сумму этих чисел
+# к полученной ранее сумме и после этого завершить программу.
 
-rating = [11, 8, 8, 5, 4]
+
+def list_sum(list_num):
+    for n, elem in enumerate(list_num):
+        list_num[n] = float(elem)
+    total = sum(list_num)
+    return total
+
+
+print('Для добавления к общей сумме вводите числа через пробел. Для выхода из программы нажмите "q".')
+list_total = 0
+total_sum = 0
+q = 0
 
 while True:
-    if input("Enter new rating value? y/n\n") == "y":
-        new_item = int(input("Please enter new rating value: "))
-        for i in rating:
-            if i < new_item:
-                rating.insert(rating.index(i), new_item)
+    user_list = input('').split()
+
+    for i in user_list:
+        if i.lower() == 'q':
+            user_list.remove(i)
+            list_total = list_sum(user_list)
+            total_sum += list_total
+            print(f'Сумма введенных чисел (Общая сумма)\n{list_sum(user_list)} ({total_sum})\n')
+            q = 1
+            break
+        try:
+            float(i)
+        except ValueError:
+            print('Вы хотите выйти из программы? Для выхода нажмите "q"')
+            if input('') == 'q':
+                user_list.remove(i)
+                list_total = list_sum(user_list)
+                total_sum += list_total
+                print(f'Сумма введенных чисел (Общая сумма)\n{list_sum(user_list)} ({total_sum})\n')
+                q = 1
                 break
-            elif new_item > 0:
-                rating.append(new_item)
-                break
-        print(rating)
-    else:
-        print(rating)
+            else:
+                user_list.remove(i)
+                continue
+
+    if q == 1:
         break
+    list_total = list_sum(user_list)
+    total_sum += list_total
+    print(f'Сумма введенных чисел (Общая сумма)\n{list_sum(user_list)} ({total_sum})\n')
