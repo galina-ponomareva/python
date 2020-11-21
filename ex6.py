@@ -1,20 +1,33 @@
-# Реализовать два небольших скрипта:
-# а) итератор, генерирующий целые числа, начиная с указанного,
-# б) итератор, повторяющий элементы некоторого списка, определенного заранее.
-# Подсказка: использовать функцию count() и cycle() модуля itertools.
-# Обратите внимание, что создаваемый цикл не должен быть бесконечным. Необходимо предусмотреть условие его завершения.
-# Например, в первом задании выводим целые числа, начиная с 3, а при достижении числа 10 завершаем цикл.
-# Во втором также необходимо предусмотреть условие, при котором повторение элементов списка будет прекращено.
+# Необходимо создать (не программно) текстовый файл, где каждая строка описывает учебный предмет и наличие лекционных,
+# практических и лабораторных занятий по этому предмету и их количество.
+# Важно, чтобы для каждого предмета не обязательно были все типы занятий. Сформировать словарь,
+# содержащий название предмета и общее количество занятий по нему. Вывести словарь на экран.
+# Примеры строк файла:
+# Информатика: 100(л) 50(пр) 20(лаб).
+# Физика: 30(л) — 10(лаб)
+# Физкультура: — 30(пр) —
+#
+# Пример словаря:
+# {“Информатика”: 170, “Физика”: 40, “Физкультура”: 30}
 
-from itertools import count, cycle
-from sys import argv
+try:
+    with open("text_6.txt", 'r', encoding="utf-8") as f_tt:
+        timetable = [el for el in f_tt.readlines()]
+        tt_keys = [list(el.split()[0]) for el in timetable]
+        for el in tt_keys:
+            el.remove(':')
+        tt_keys = [''.join(el) for el in tt_keys]
 
-name, num, state, q = argv
+        tt_values = [list(el) for el in timetable]
+        for i, el in enumerate(tt_values):
+            el = [a for a in el if 48 <= ord(a) <= 57 or ord(a) == 32]
+            tt_values[i] = (''.join(el)).split()
+            tt_values[i] = [int(j) for j in tt_values[i]]
+        tt_values = [sum(el) for el in tt_values]
 
-nums = count(int(num))
-states = cycle(state.split())
+        tt_dict = {k: v for k, v in zip(tt_keys, tt_values)}
 
-for i in range(int(q)):
-    curr_num = next(nums)
-    curr_state = next(states)
-    print(f"{curr_num} {curr_state}")
+        print(tt_dict)
+
+except IOError as err:
+    print(err)

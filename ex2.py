@@ -1,13 +1,15 @@
-# Представлен список чисел. Необходимо вывести элементы исходного списка, значения которых больше предыдущего элемента.
-# Подсказка: элементы, удовлетворяющие условию, оформить в виде списка. Для формирования списка использовать генератор.
-# Пример исходного списка: [300, 2, 12, 44, 1, 1, 4, 10, 7, 1, 78, 123, 55].
-# Результат: [12, 44, 4, 10, 78, 123].
+# Создать текстовый файл (не программно), сохранить в нем несколько строк, выполнить подсчет количества строк,
+# количества слов в каждой строке.
 
-import random
+try:
+    f_user_data = open("user_data.txt", 'r', encoding="utf-8")
+    data = f_user_data.readlines()
+    strings = len(data)
+    words = [len(el.split()) for el in data]
 
-elem_number = 15
-
-my_list = [random.randint(0, 500) for el in range(0, elem_number)]
-new_list = [el for el in my_list if my_list.index(el) != 0 and el > my_list[my_list.index(el)-1]]
-print(my_list)
-print(new_list)
+    print(f"Количество строк: {strings}")
+    for i, el in enumerate(words):
+        print(f"В строке {i+1} - {el} слов")
+    f_user_data.close()
+except IOError as err:
+    print(err)

@@ -1,9 +1,12 @@
-# Реализовать формирование списка, используя функцию range() и возможности генератора.
-# В список должны войти четные числа от 100 до 1000 (включая границы).
-# Необходимо получить результат вычисления произведения всех элементов списка.
-# Подсказка: использовать функцию reduce().
+# Создать (программно) текстовый файл, записать в него программно набор чисел, разделенных пробелами.
+# Программа должна подсчитывать сумму чисел в файле и выводить ее на экран.
 
-from functools import reduce
+from random import randint
 
-my_list = (el for el in range(100, 1001) if el % 2 == 0)
-print(reduce(lambda n_1, n_2: n_1 * n_2, my_list))
+with open("numbers.txt", 'w+', encoding="utf-8") as f_num:
+    nums = [str(randint(-100, 100)) for el in range(0, 20)]
+    f_num.write(' '.join(nums))
+    f_num.seek(0)
+
+    data = [int(el) for el in f_num.readline().split()]
+    print(f"Сумма чисел в файле: {sum(data)}")

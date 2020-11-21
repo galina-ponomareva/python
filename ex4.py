@@ -1,14 +1,21 @@
-# Представлен список чисел. Определить элементы списка, не имеющие повторений.
-# Сформировать итоговый массив чисел, соответствующих требованию.
-# Элементы вывести в порядке их следования в исходном списке. Для выполнения задания обязательно использовать генератор.
-# Пример исходного списка: [2, 2, 2, 7, 23, 1, 44, 44, 3, 2, 10, 7, 4, 11].
-# Результат: [23, 1, 3, 10, 4, 11]
+# Создать (не программно) текстовый файл со следующим содержимым:
+# One — 1
+# Two — 2
+# Three — 3
+# Four — 4
+# Необходимо написать программу, открывающую файл на чтение и считывающую построчно данные.
+# При этом английские числительные должны заменяться на русские.
+# Новый блок строк должен записываться в новый текстовый файл.
 
-import random
+import translators as ts
 
-elem_number = 15
+try:
+    with open("text_4.txt", 'r', encoding="utf-8") as f_eng:
+        eng_num = f_eng.readlines()
+        rus_num = [ts.translate_html(el.split()[0], translator=ts.google, to_language='ru') + ' '
+                   + ' '.join(el.split()[1:3]) + '\n' for el in eng_num]
 
-my_list = [random.randint(0, 20) for el in range(0, elem_number)]
-new_list = [el for el in my_list if my_list.count(el) == 1]
-print(my_list)
-print(new_list)
+    with open("text_4_ru.txt", 'w', encoding="utf-8") as f_rus:
+        f_rus.writelines(rus_num)
+except IOError as err:
+    print(err)
