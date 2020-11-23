@@ -1,29 +1,70 @@
-# Реализовать класс Road (дорога), в котором определить атрибуты: length (длина), width (ширина).
-# Значения данных атрибутов должны передаваться при создании экземпляра класса. Атрибуты сделать защищенными.
-# Определить метод расчета массы асфальта, необходимого для покрытия всего дорожного полотна.
-# Использовать формулу: длина * ширина * масса асфальта для покрытия одного кв метра дороги асфальтом,
-# толщиной в 1 см * чи сло см толщины полотна. Проверить работу метода.
-# Например: 20м * 5000м * 25кг * 5см = 12500 т
+from abc import ABC, abstractmethod
 
 
-class Road:
+class Clothes(ABC):
 
-    def __init__(self, length, width):
-        self.__length = length
-        self.__width = width
+    @abstractmethod
+    def fabric_waste(self):
+        pass
 
-    def asphalt(self, thick):
-        mass = self.__length * self.__width * 25 * thick / 1000
-        return f"Масса асфальта для покрытия участка дорожного полотна: {mass} т."
+
+class Coat(Clothes):
+
+    def __init__(self, v):
+        self.v = v
+
+    @property
+    def v(self):
+        return self.__v
+
+    @v.setter
+    def v(self, v):
+        if v < 36:
+            self.__v = 36
+        elif v > 72:
+            self.__v = 72
+        elif v % 2 != 0:
+            self.__v = v + 1
+        else:
+            self.__v = v
+
+    def fabric_waste(self):
+        return f"Расход ткани для пальто размера {self.v} составит {(self.v / 23 + 0.5):.2f} п.м. " \
+               f"при ширине отреза 150 см."
+
+
+class Suit(Clothes):
+
+    def __init__(self, h):
+        self.h = h
+
+    @property
+    def h(self):
+        return self.__h
+
+    @h.setter
+    def h(self, h):
+        if h < 1.2:
+            self.__h = 1.2
+        elif h > 2.2:
+            self.__h = 2.2
+        else:
+            self.__h = h
+
+    def fabric_waste(self):
+        return f"Расход ткани для костюма (рост {self.h} м) составит {(2 * self.h +0.3):.2f} п.м. " \
+               f"при ширине отреза 150 см."
 
 
 while True:
     try:
-        r_length = float(input("Введите длину участка дороги, м: "))
-        r_width = float(input("Введите ширину дороги, м: "))
-        r = Road(r_length, r_width)
-        r_thick = float(input("Введите толщину полотна, см: "))
-        print(r.asphalt(5))
+        size = int(input("Введите размер одежды: "))
+        height = float(input("Введите рост: "))
+        coat_1 = Coat(size)
+        print(coat_1.fabric_waste())
+
+        suit_1 = Suit(height)
+        print(suit_1.fabric_waste())
         break
     except ValueError:
         print("Введите число.")

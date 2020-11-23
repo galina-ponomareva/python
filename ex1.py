@@ -1,48 +1,31 @@
-# Создать класс TrafficLight (светофор) и определить у него один атрибут color (цвет) и метод running (запуск).
-# Атрибут реализовать как приватный. В рамках метода реализовать переключение светофора в режимы:
-# красный, желтый, зеленый. Продолжительность первого состояния (красный) составляет 7 секунд,
-# второго (желтый) — 2 секунды, третьего (зеленый) — на ваше усмотрение.
-# Переключение между режимами должно осуществляться только в указанном порядке (красный, желтый, зеленый).
-# Проверить работу примера, создав экземпляр и вызвав описанный метод.
-# Задачу можно усложнить, реализовав проверку порядка режимов,
-# и при его нарушении выводить соответствующее сообщение и завершать скрипт.
+class Matrix:
 
-from time import sleep
+    def __init__(self, matrix):
+        self.matrix = matrix
 
+    def __str__(self):
+        return '\n'.join('\t'.join([str(i) for i in el]) for el in self.matrix)
 
-def out_red(text):
-    print("\033[31m {}".format(text), end="")
-
-
-def out_yellow(text):
-    print("\033[33m {}".format(text), end="")
-
-
-def out_green(text):
-    print("\033[32m {}".format(text), end="")
-
-
-class TrafficLight:
-
-    __color = "black"
-
-    def running(self, counts):
-        i = 0
-        while i < counts:
-            TrafficLight.__color = "red"
-            out_red(f"\r{TrafficLight.__color}")
-            sleep(7)
-            TrafficLight.__color = "yellow"
-            out_yellow(f"\r{TrafficLight.__color}")
-            sleep(2)
-            TrafficLight.__color = "green"
-            out_green(f"\r{TrafficLight.__color}")
-            sleep(7)
-            TrafficLight.__color = "yellow"
-            out_yellow(f"\r{TrafficLight.__color}")
-            sleep(2)
-            i += 1
+    def __add__(self, other):
+        if len(self.matrix) != len(other.matrix) or len(self.matrix[0]) != len(other.matrix[0]):
+            return "Сложение матриц разной размерности не определено."
+        else:
+            result = []
+            row = []
+            for i in range(len(self.matrix)):
+                for j in range(len(self.matrix[0])):
+                    row.append(self.matrix[i][j] + other.matrix[i][j])
+                    if len(row) == len(self.matrix[0]):
+                        result.append(row)
+                        row = []
+            result = Matrix(result)
+            return result
 
 
-a = TrafficLight()
-a.running(2)
+m_1 = Matrix([[1, 2], [3, 4]])
+print(m_1)
+
+m_2 = Matrix([[2, 0], [1, -1]])
+print(m_2)
+
+print(m_1 + m_2)

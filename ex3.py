@@ -1,48 +1,76 @@
-# Реализовать базовый класс Worker (работник), в котором определить атрибуты: name, surname, position (должность),
-# income (доход). Последний атрибут должен быть защищенным и ссылаться на словарь, содержащий элементы: оклад и премия,
-# например, {"wage": wage, "bonus": bonus}. Создать класс Position (должность) на базе класса Worker.
-# В классе Position реализовать методы получения полного имени сотрудника (get_full_name) и дохода с учетом премии
-# (get_total_income). Проверить работу примера на реальных данных (создать экземпляры класса Position, передать данные,
-# проверить значения атрибутов, вызвать методы экземпляров).
-
-class Worker:
-
-    def __init__(self, name, surname, position, wage, bonus):
-        self.name = name
-        self.surname = surname
-        self.position = position
-        self.__income = {"wage": wage, "bonus": bonus}
+from math import ceil
 
 
-class Position(Worker):
+class Cell:
 
-    def get_full_name(self):
-        print(self.name, self.surname, sep=" ")
+    def __init__(self, cells_num):
+        self.cells_num = cells_num
 
-    def get_total_income(self):
-        print(self._Worker__income.get("wage") + self._Worker__income.get("bonus"))
+    @property
+    def cells_num(self):
+        return self.__cells_num
+
+    @cells_num.setter
+    def cells_num(self, cells_num):
+        if cells_num < 0:
+            self.__cells_num = 0
+        else:
+            self.__cells_num = cells_num
+
+    def __str__(self):
+        return f"{self.__cells_num}"
+
+    def __add__(self, other):
+        result = self.__cells_num + other.__cells_num
+        result = Cell(result)
+        return result
+
+    def __sub__(self, other):
+        if self.__cells_num < other.__cells_num:
+            return "Разность не определена."
+        else:
+            result = self.__cells_num - other.__cells_num
+            result = Cell(result)
+            return result
+
+    def __mul__(self, other):
+        result = self.__cells_num * other.__cells_num
+        result = Cell(result)
+        return result
+
+    def __truediv__(self, other):
+        if other.__cells_num == 0:
+            return "Деление на нулевую клетку не определено."
+        else:
+            result = ceil(self.__cells_num / other.__cells_num)
+            result = Cell(result)
+            return result
+
+    def make_order(self, row):
+        string = chr(152) * row
+        total = [string for _ in range(0, self.__cells_num // row)]
+        if self.__cells_num % row != 0:
+            total.append(chr(152) * (self.__cells_num % row))
+        return "\n".join(total)
 
 
-workers = []
+cell_1 = Cell(5)
+cell_2 = Cell(2)
 
-while True:
-    if input("Добавить сотрудника? да/нет\n") == "нет":
-        break
-    try:
-        w_name = input("Введите имя: ")
-        w_surname = input("Введите фамилию: ")
-        w_position = input("Введите должность: ")
-        w_wage = float(input("Введите оклад: "))
-        w_bonus = float(input("Введите премию: "))
+print(cell_1, cell_2)
+print(cell_1 + cell_2)
+print(cell_1 - cell_2)
+print(cell_2 - cell_1)
+print(cell_1 * cell_2)
+print(cell_1 / cell_2)
 
-        worker = Position(w_name, w_surname, w_position, w_wage, w_bonus)
-        workers.append(worker)
-        continue
-    except ValueError:
-        print("Для параметров 'оклад' и 'премия' введите число.")
-        continue
+cell_3 = Cell(-3)
 
-for w in workers:
-    print(w.surname, w.position, w._Worker__income.get("wage"))
-    w.get_full_name()
-    w.get_total_income()
+print(cell_3)
+print(cell_1 / cell_3)
+
+print(cell_1.make_order(2))
+print(cell_1.make_order(6))
+
+cell_4 = Cell(101)
+print(cell_4.make_order(12))
