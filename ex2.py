@@ -1,15 +1,30 @@
-# Создать текстовый файл (не программно), сохранить в нем несколько строк, выполнить подсчет количества строк,
-# количества слов в каждой строке.
+# Реализовать класс Road (дорога), в котором определить атрибуты: length (длина), width (ширина).
+# Значения данных атрибутов должны передаваться при создании экземпляра класса. Атрибуты сделать защищенными.
+# Определить метод расчета массы асфальта, необходимого для покрытия всего дорожного полотна.
+# Использовать формулу: длина * ширина * масса асфальта для покрытия одного кв метра дороги асфальтом,
+# толщиной в 1 см * чи сло см толщины полотна. Проверить работу метода.
+# Например: 20м * 5000м * 25кг * 5см = 12500 т
 
-try:
-    f_user_data = open("user_data.txt", 'r', encoding="utf-8")
-    data = f_user_data.readlines()
-    strings = len(data)
-    words = [len(el.split()) for el in data]
 
-    print(f"Количество строк: {strings}")
-    for i, el in enumerate(words):
-        print(f"В строке {i+1} - {el} слов")
-    f_user_data.close()
-except IOError as err:
-    print(err)
+class Road:
+
+    def __init__(self, length, width):
+        self.__length = length
+        self.__width = width
+
+    def asphalt(self, thick):
+        mass = self.__length * self.__width * 25 * thick / 1000
+        return f"Масса асфальта для покрытия участка дорожного полотна: {mass} т."
+
+
+while True:
+    try:
+        r_length = float(input("Введите длину участка дороги, м: "))
+        r_width = float(input("Введите ширину дороги, м: "))
+        r = Road(r_length, r_width)
+        r_thick = float(input("Введите толщину полотна, см: "))
+        print(r.asphalt(5))
+        break
+    except ValueError:
+        print("Введите число.")
+        continue
