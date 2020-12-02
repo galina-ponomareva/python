@@ -1,76 +1,37 @@
-from math import ceil
+# Создайте собственный класс-исключение, который должен проверять содержимое списка на наличие только чисел.
+# Проверить работу исключения на реальном примере. Необходимо запрашивать у пользователя данные и заполнять список.
+# Класс-исключение должен контролировать типы данных элементов списка.
+# Примечание: длина списка не фиксирована. Элементы запрашиваются бесконечно, пока пользователь сам не остановит
+# работу скрипта, введя, например, команду “stop”.
+# При этом скрипт завершается, сформированный список выводится на экран.
+# Подсказка: для данного задания примем, что пользователь может вводить только числа и строки.
+# При вводе пользователем очередного элемента необходимо реализовать проверку типа элемента и вносить его в список,
+# только если введено число. Класс-исключение должен не позволить пользователю ввести текст (не число) и отобразить
+# соответствующее сообщение. При этом работа скрипта не должна завершаться.
 
 
-class Cell:
+class OnlyNumbersError(Exception):
 
-    def __init__(self, cells_num):
-        self.cells_num = cells_num
+    def __init__(self, text):
+        self.text = text
 
-    @property
-    def cells_num(self):
-        return self.__cells_num
 
-    @cells_num.setter
-    def cells_num(self, cells_num):
-        if cells_num < 0:
-            self.__cells_num = 0
+user_list = []
+print("Enter list elements (only numbers required). Use space as a separator. Enter 'q' to stop data collection.")
+
+ex = False
+while not ex:
+    el = input("").split()
+    for i in el:
+        if i == "q":
+            print(user_list)
+            ex = True
+            break
+        try:
+            non_digit = [j for j in list(i) if ord(j) > 57 or ord(j) < 45 or ord(j) == 47]
+            if non_digit:
+                raise OnlyNumbersError("Only numbers can be entered!")
+        except OnlyNumbersError as err:
+            print(err)
         else:
-            self.__cells_num = cells_num
-
-    def __str__(self):
-        return f"{self.__cells_num}"
-
-    def __add__(self, other):
-        result = self.__cells_num + other.__cells_num
-        result = Cell(result)
-        return result
-
-    def __sub__(self, other):
-        if self.__cells_num < other.__cells_num:
-            return "Разность не определена."
-        else:
-            result = self.__cells_num - other.__cells_num
-            result = Cell(result)
-            return result
-
-    def __mul__(self, other):
-        result = self.__cells_num * other.__cells_num
-        result = Cell(result)
-        return result
-
-    def __truediv__(self, other):
-        if other.__cells_num == 0:
-            return "Деление на нулевую клетку не определено."
-        else:
-            result = ceil(self.__cells_num / other.__cells_num)
-            result = Cell(result)
-            return result
-
-    def make_order(self, row):
-        string = chr(152) * row
-        total = [string for _ in range(0, self.__cells_num // row)]
-        if self.__cells_num % row != 0:
-            total.append(chr(152) * (self.__cells_num % row))
-        return "\n".join(total)
-
-
-cell_1 = Cell(5)
-cell_2 = Cell(2)
-
-print(cell_1, cell_2)
-print(cell_1 + cell_2)
-print(cell_1 - cell_2)
-print(cell_2 - cell_1)
-print(cell_1 * cell_2)
-print(cell_1 / cell_2)
-
-cell_3 = Cell(-3)
-
-print(cell_3)
-print(cell_1 / cell_3)
-
-print(cell_1.make_order(2))
-print(cell_1.make_order(6))
-
-cell_4 = Cell(101)
-print(cell_4.make_order(12))
+            user_list.append(float(i))
